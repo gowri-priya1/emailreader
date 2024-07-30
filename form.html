@@ -1,0 +1,163 @@
+ <!-- templates/form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-image: url('static/emailimage.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: grey;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 55%;
+            left: 52%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #0e0d0d;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .flash-messages {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            text-align: center;
+            padding: 10px;
+            background-color: skyblue;
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+
+    <title>User Form</title>
+</head>
+<body>
+
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var flashMessages = document.querySelector('.flash-messages');
+    
+            if (flashMessages) {
+                var messages = flashMessages.querySelectorAll('.flash-message');
+    
+                if (messages.length > 0) {
+                    flashMessages.style.display = 'block';
+    
+                    setTimeout(function() {
+                        flashMessages.style.display = 'none';
+                    }, 5000);  // Hide the message after 5 seconds
+                }
+            }
+        });
+    </script>
+    
+  {% endif %}
+{% endwith %}
+
+<form id="registrationForm" onsubmit="return validateForm()" action="{{ url_for('user_form') }}" method="post">
+
+
+   <label>Email:</label>
+        <input type="text" name="email" required>
+        <br><br>
+        <label>Password:</label>
+        <input type="password" name="password" required><br><br>
+        <label>Contact:</label>
+        <input type="text" name="contact" required><br><br>
+        <label>Name:</label>
+        <input type="text" name="name" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+<script>
+    function validateForm() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var contact = document.getElementById("contact").value;
+
+        // Simple validation for demonstration purposes
+        if (!/^[a-zA-Z]+$/.test(name)) {
+            alert("Name should contain only alphabets.");
+            return false;
+        }
+
+        if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+
+        if (!/^[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/.test(password)) {
+            alert("Password should be at least 8 characters and may contain letters, numbers, and special characters.");
+            return false;
+        }
+
+        if (!/^\d{10}$/.test(contact)) {
+            alert("Contact number should contain exactly 10 digits.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>
